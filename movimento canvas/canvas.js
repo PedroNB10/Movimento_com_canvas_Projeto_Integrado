@@ -10,21 +10,35 @@ var inicio = true
 
 var pular = false
 
-var x = (window.innerWidth)/2 -20//Posição inicial
-var y = (window.innerHeight)/2 -20
+var x = (window.innerWidth) / 2 - 20//Posição inicial
+var y = (window.innerHeight) / 2 - 20
+
+var altura_atual = (window.innerHeight) / 2 - 20
 var dx = 4; // velocidade do movimento (seria o aux)
+
+var dy = 4
+
+let contador = 0
+var plataforma = true
+
 
 
 function animate() {
- 
 
+   console.log(y)
+    
     requestAnimationFrame(animate); //fica chamando a função animate
 
-  
    
+    if(x>400 && y==233.5){
+        y=altura_atual
+    }
+
     
-    if (ir_direita == true) {
   
+
+    if (ir_direita == true) {
+
         c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
         c.fillStyle = 'red'//cor de preenchimento do quadrado
         c.fillRect(x, y, 20, 20); //serve para falar as dimensões
@@ -33,10 +47,10 @@ function animate() {
 
     }
 
-    
+
 
     if (ir_esquerda == true) {
-  
+
         c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
         c.fillStyle = 'red'//cor de preenchimento do quadrado
         c.fillRect(x, y, 20, 20); //serve para falar as dimensões
@@ -45,44 +59,80 @@ function animate() {
 
     }
 
-     if(ir_esquerda == false){
-      
+    if (ir_esquerda == false) {
+
         c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
         c.fillStyle = 'red'//cor de preenchimento do quadrado
         c.fillRect(x, y, 20, 20); //serve para falar as dimensões
     }
 
+    if (pular == true ) {
 
-    if(pular == true && ir_direita==false && ir_esquerda==false){
-
-        alert('pulei pra cima')
-        pular=false
         
+        
+
+        setTimeout(function(){
+            c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
+            c.fillStyle = 'red'//cor de preenchimento do quadrado
+            c.fillRect(x, y, 20, 20); //serve para falar as dimensões
+            y = y + 80;
+        }, 250)
+
+       
+
+        c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
+        c.fillStyle = 'red'//cor de preenchimento do quadrado
+        c.fillRect(x, y, 20, 20); //serve para falar as dimensões
+  
+        y = y - 80;
+        
+        if(y <= 314&& x<420 && plataforma==true){
+      
+            y= y-60
+           
+           plataforma=false
             }
-
+            pular = false
             
+     
+    }
 
+     
 
+    if (pular == true && ir_direita == false && ir_esquerda == false) {
 
-    if(pular == true && ir_direita==true){
-
-alert('pulei pra direita')
-ir_direita=false
-ir_esquerda=false
-pular=false
+        
+        pular = false
 
     }
 
-    if(pular == true && ir_esquerda==true){
 
-        alert('pulei pra esquerda')
-        ir_direita=false
-        ir_esquerda=false
-        pular=false
+
+
+
+    if (pular == true && ir_direita == true) {
+
+        ir_direita = false
+        ir_esquerda = false
+        pular = false
+
+    }
+
+    if (pular == true && ir_esquerda == true) {
+
        
-            }
+        ir_direita = false
+        ir_esquerda = false
+        pular = false
+
+    }
 
 
+    c.fillStyle = 'yellow'//cor de preenchimento do quadrado
+    c.fillRect(0, 314, (window.innerWidth), 20); //serve para falar as dimensões
+
+    c.fillStyle = 'green'//cor de preenchimento do quadrado
+    c.fillRect(0, ((window.innerHeight) / 2 )-60, 400, 20); //serve para falar as dimensões
 
 
 
@@ -101,56 +151,56 @@ document.addEventListener('keydown', tecla_pular_apertada, false);
 document.addEventListener('keyup', tecla_pular_solta, false);
 
 function tecla_pular_apertada(e) {
-   
+
     if (e.keyCode == 32) {
 
         pular = true
-        
+
     }
 }
 
 function tecla_pular_solta(e) {
-   
-    
+
+
     if (e.keyCode == 32) {
-     
+
         pular = false
     }
 }
 
 
 function tecla_direita_apertada(e) {
-   
+
     if (e.keyCode == 39) {
 
         ir_direita = true
-        
+
     }
 }
 
 function tecla_direita_solta(e) {
-   
-    
+
+
     if (e.keyCode == 39) {
-     
+
         ir_direita = false
     }
 }
 
 function tecla_esquerda_apertada(e) {
-   
+
     if (e.keyCode == 37) {
-       
+
         ir_esquerda = true
-        
+
     }
 }
 
 function tecla_esquerda_solta(e) {
-    
+
     if (e.keyCode == 37) {
         ir_esquerda = false
-      
+
     }
 }
 

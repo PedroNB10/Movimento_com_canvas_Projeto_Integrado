@@ -10,49 +10,64 @@ var inicio = true
 
 var pular = false
 
-var lado_do_quadrado = 20
+var largura_canvas = window.innerHeight
+var comprimento_canvas = window.innerWidth
 
-var x = (window.innerWidth) / 2 - lado_do_quadrado//Posição inicial
-var y = (window.innerHeight) / 2 - lado_do_quadrado
+var lado_do_quadrado =largura_canvas*0.127591
+var raio_circulos = lado_do_quadrado*0.4
 
-var altura_atual = (window.innerHeight) / 2 - lado_do_quadrado
-var dx = 4; // velocidade do movimento (seria o aux)
 
-var dy = 4
+var altura_atual_quadrado = (largura_canvas)*0.9681 - lado_do_quadrado
 
-let contador = 0
+var y = altura_atual_quadrado
+
+var x = (comprimento_canvas) / 2 - lado_do_quadrado//Posição inicial
+var dx = 8; // velocidade do movimento (seria o aux)
+
+var posy_plataforma = (largura_canvas)*0.404 // para colocar em porcentagem precisa tirar a parte :/ 2 -60 e depois colocar um *0.35
+var altura_da_plataforma = (largura_canvas)*0.9681 - posy_plataforma// em relação ao chao
+
+var altura_do_pulo = largura_canvas*0.42
+
+// console.log(lado_do_quadrado)
 var plataforma = false
 
 
+var largura_plataforma = largura_canvas * 0.03189
+var comprimento_plataforma = comprimento_canvas * 0.3018
+
+var cor_queijo = "yellow"
+var cor_laranja = "#F5843F"
+var cor_cereja = "#C90407"
+var cor_tomate = "#D64D53"
 
 
-var posy_plataforma = (window.innerHeight)*0.404 // para colocar em porcentagem precisa tirar a parte :/ 2 -60 e depois colocar um *0.35
-var altura_inicial = (window.innerHeight)*0.5
-
-var altura_da_plataforma = altura_inicial - posy_plataforma// em relação ao chao
-
-var altura_do_pulo = altura_da_plataforma+lado_do_quadrado
 
 
-var largura_plataforma = window.innerHeight * 0.03189
-var comprimento_plataforma = window.innerWidth * 0.3018
+
 
 function animate() {
-
-    //    console.log(y)
+    
+       console.log(x)
     //    console.log(altura_da_plataforma)
     requestAnimationFrame(animate); //fica chamando a função animate
    
 
-    if (x >= comprimento_plataforma && y >= (posy_plataforma-lado_do_quadrado)) { //y == 233.5
+    // if (x >= comprimento_plataforma && y >= (posy_plataforma-lado_do_quadrado)) { //y == 233.5
     
         
-      plataforma = false
-        y = altura_atual
+    //   plataforma = false
+    //     y = altura_atual_quadrado
         
+    // }
+
+if(x < comprimento_canvas*0.385  ){ // para coletar o queijo
+cor_queijo = 'transparent'
+}
+
+if(x < comprimento_canvas*0.385  ){ // para coletar o queijo
+    cor_queijo = 'transparent'
     }
-
-
 
 
     if (ir_direita == true) {
@@ -97,12 +112,12 @@ function animate() {
     if (pular == true) {
 
 
-        if (y > posy_plataforma && x < comprimento_plataforma && plataforma == false) { //y <=293.5
-            console.log(`posy plataforma:${posy_plataforma}`)
-            y = posy_plataforma-lado_do_quadrado //isso resulta em um pulo mais alto ao ficar sobre a plaforma
-                        //-20 para somar a altura do quadrado
-            plataforma = true
-        }
+        // if (y > posy_plataforma && x < comprimento_plataforma && plataforma == false) { //y <=293.5
+        //     console.log(`posy plataforma:${posy_plataforma}`)
+        //     y = posy_plataforma-lado_do_quadrado //isso resulta em um pulo mais alto ao ficar sobre a plaforma
+        //                 //-20 para somar a altura do quadrado
+        //     plataforma = true
+        // }
 
         c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
         c.fillStyle = 'red'//cor de preenchimento do quadrado
@@ -160,12 +175,39 @@ function animate() {
     }
 
 
-    c.fillStyle = 'yellow'//cor de preenchimento do quadrado
-    c.fillRect(0, window.innerHeight*0.5, (window.innerWidth), lado_do_quadrado); //serve para falar as dimensões
+    c.fillStyle = 'transparent'//cor de preenchimento do quadrado
+    c.fillRect(0,(largura_canvas*0.968102), (comprimento_canvas), lado_do_quadrado); //serve para falar as dimensões
 
-    c.fillStyle = 'green'//cor de preenchimento do quadrado
-    c.fillRect(0, posy_plataforma, comprimento_plataforma, lado_do_quadrado); //serve para falar as dimensões
+    // c.fillStyle = 'green'//cor de preenchimento do quadrado
+    // c.fillRect(0, posy_plataforma, comprimento_plataforma, lado_do_quadrado); //serve para falar as dimensões
+    // c.fillStyle = 'yellow'//cor de preenchimento do quadrado
+    // c.fillRect(0,(window.innerHeight-20), (comprimento_canvas), lado_do_quadrado);
 
+    // QUEIJO
+
+    c.beginPath();
+    c.moveTo(comprimento_canvas*0.385, largura_canvas*0.8) //(x,y) // 470.5 
+    c.lineTo(comprimento_canvas*0.385, largura_canvas*0.93);//(x,y)
+    c.lineTo(comprimento_canvas*0.3014, largura_canvas*0.93);//(x,y)
+    c.closePath();// liga o ponto final ao ponto inicial
+    // the fill color
+    c.fillStyle = cor_queijo;
+    c.fill();
+
+    c.beginPath()//inicio do comando 
+    c.arc(comprimento_canvas*0.275, largura_canvas*0.67, raio_circulos, 0, Math.PI * 2, false)  //c.arc (x, y, raio do circulo, angulo_inicial(em rad), angulo_final(em rad), anti_horario ou horario)
+    c.fillStyle = cor_laranja//cor para cobrir a área do círculo 
+    c.fill() // comando para iniciar o preenchimento da cor
+
+    c.beginPath()//inicio do comando 
+    c.arc(comprimento_canvas*0.173, largura_canvas*0.478, raio_circulos, 0, Math.PI * 2, false)  //c.arc (x, y, raio do circulo, angulo_inicial(em rad), angulo_final(em rad), anti_horario ou horario)
+    c.fillStyle = cor_cereja//cor para cobrir a área do círculo 
+    c.fill() // comando para iniciar o preenchimento da cor
+
+    c.beginPath()//inicio do comando 
+    c.arc(comprimento_canvas*0.173, largura_canvas*0.8771, raio_circulos, 0, Math.PI * 2, false)  //c.arc (x, y, raio do circulo, angulo_inicial(em rad), angulo_final(em rad), anti_horario ou horario)
+    c.fillStyle = cor_tomate//cor para cobrir a área do círculo 
+    c.fill() // comando para iniciar o preenchimento da cor
 
 
 }

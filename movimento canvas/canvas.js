@@ -10,39 +10,67 @@ var inicio = true
 
 var pular = false
 
-var x = (window.innerWidth) / 2 - 20//Posição inicial
-var y = (window.innerHeight) / 2 - 20
+var lado_do_quadrado = 20
 
-var altura_atual = (window.innerHeight) / 2 - 20
+var x = (window.innerWidth) / 2 - lado_do_quadrado//Posição inicial
+var y = (window.innerHeight) / 2 - lado_do_quadrado
+
+var altura_atual = (window.innerHeight) / 2 - lado_do_quadrado
 var dx = 4; // velocidade do movimento (seria o aux)
 
 var dy = 4
 
 let contador = 0
-var plataforma = true
+var plataforma = false
 
 
+
+
+var posy_plataforma = (window.innerHeight)*0.404 // para colocar em porcentagem precisa tirar a parte :/ 2 -60 e depois colocar um *0.35
+var altura_inicial = (window.innerHeight)*0.5
+
+var altura_da_plataforma = altura_inicial - posy_plataforma// em relação ao chao
+
+var altura_do_pulo = altura_da_plataforma+lado_do_quadrado
+
+
+var largura_plataforma = window.innerHeight * 0.03189
+var comprimento_plataforma = window.innerWidth * 0.3018
 
 function animate() {
 
-   console.log(y)
-    
+    //    console.log(y)
+    //    console.log(altura_da_plataforma)
     requestAnimationFrame(animate); //fica chamando a função animate
-
    
-    if(x>400 && y==233.5){
-        y=altura_atual
+
+    if (x >= comprimento_plataforma && y >= (posy_plataforma-lado_do_quadrado)) { //y == 233.5
+    
+        
+      plataforma = false
+        y = altura_atual
+        
     }
 
-    
-  
+
+
 
     if (ir_direita == true) {
 
         c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
         c.fillStyle = 'red'//cor de preenchimento do quadrado
-        c.fillRect(x, y, 20, 20); //serve para falar as dimensões
+        c.fillRect(x, y, lado_do_quadrado, lado_do_quadrado); //serve para falar as dimensões
         x = x + dx;
+
+
+    }
+
+    if (ir_direita == false) {
+
+        c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
+        c.fillStyle = 'red'//cor de preenchimento do quadrado
+        c.fillRect(x, y, lado_do_quadrado, lado_do_quadrado); //serve para falar as dimensões
+
 
 
     }
@@ -53,7 +81,7 @@ function animate() {
 
         c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
         c.fillStyle = 'red'//cor de preenchimento do quadrado
-        c.fillRect(x, y, 20, 20); //serve para falar as dimensões
+        c.fillRect(x, y, lado_do_quadrado, lado_do_quadrado); //serve para falar as dimensões
         x = x - dx;
 
 
@@ -63,45 +91,49 @@ function animate() {
 
         c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
         c.fillStyle = 'red'//cor de preenchimento do quadrado
-        c.fillRect(x, y, 20, 20); //serve para falar as dimensões
+        c.fillRect(x, y, lado_do_quadrado, lado_do_quadrado); //serve para falar as dimensões
     }
 
-    if (pular == true ) {
+    if (pular == true) {
 
-        
-        
 
-        setTimeout(function(){
-            c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
-            c.fillStyle = 'red'//cor de preenchimento do quadrado
-            c.fillRect(x, y, 20, 20); //serve para falar as dimensões
-            y = y + 80;
-        }, 250)
-
-       
+        if (y > posy_plataforma && x < comprimento_plataforma && plataforma == false) { //y <=293.5
+            console.log(`posy plataforma:${posy_plataforma}`)
+            y = posy_plataforma-lado_do_quadrado //isso resulta em um pulo mais alto ao ficar sobre a plaforma
+                        //-20 para somar a altura do quadrado
+            plataforma = true
+        }
 
         c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
         c.fillStyle = 'red'//cor de preenchimento do quadrado
-        c.fillRect(x, y, 20, 20); //serve para falar as dimensões
-  
-        y = y - 80;
-        
-        if(y <= 314&& x<420 && plataforma==true){
-      
-            y= y-60
-           
-           plataforma=false
-            }
-            pular = false
-            
-     
+        c.fillRect(x, y, lado_do_quadrado, lado_do_quadrado); //serve para falar as dimensões
+
+        y = y - altura_do_pulo;
+
+
+        setTimeout(function () {
+            c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
+            c.fillStyle = 'red'//cor de preenchimento do quadrado
+            c.fillRect(x, y, lado_do_quadrado, lado_do_quadrado); //serve para falar as dimensões
+            y = y + altura_do_pulo;
+        }, 250)
+
+
+
+
+
+
+
+        pular = false
+
+
     }
 
-     
+
 
     if (pular == true && ir_direita == false && ir_esquerda == false) {
 
-        
+
         pular = false
 
     }
@@ -120,7 +152,7 @@ function animate() {
 
     if (pular == true && ir_esquerda == true) {
 
-       
+
         ir_direita = false
         ir_esquerda = false
         pular = false
@@ -129,10 +161,10 @@ function animate() {
 
 
     c.fillStyle = 'yellow'//cor de preenchimento do quadrado
-    c.fillRect(0, 314, (window.innerWidth), 20); //serve para falar as dimensões
+    c.fillRect(0, window.innerHeight*0.5, (window.innerWidth), lado_do_quadrado); //serve para falar as dimensões
 
     c.fillStyle = 'green'//cor de preenchimento do quadrado
-    c.fillRect(0, ((window.innerHeight) / 2 )-60, 400, 20); //serve para falar as dimensões
+    c.fillRect(0, posy_plataforma, comprimento_plataforma, lado_do_quadrado); //serve para falar as dimensões
 
 
 

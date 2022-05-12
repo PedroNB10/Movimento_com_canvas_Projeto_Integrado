@@ -9,25 +9,22 @@ var ir_esquerda = false
 var inicio = true
 
 var pular = false
+var fase_completa = false
 
 var largura_canvas = window.innerHeight
 var comprimento_canvas = window.innerWidth
 
-var lado_do_quadrado =largura_canvas*0.127591
-var raio_circulos = lado_do_quadrado*0.4
+var lado_do_quadrado = largura_canvas * 0.127591
+var raio_circulos = lado_do_quadrado * 0.4
 
+var y = (largura_canvas) * 0.9681 - lado_do_quadrado //Posição inicial no eixo vertical
+var x = (comprimento_canvas)  - lado_do_quadrado//Posição inicial no eixo horizontal
+var dx = 8; // velocidade dopersonagem
 
-var altura_atual_quadrado = (largura_canvas)*0.9681 - lado_do_quadrado
+var posy_plataforma = (largura_canvas) * 0.404 
+var altura_da_plataforma = (largura_canvas) * 0.9681 - posy_plataforma// em relação ao chao
 
-var y = altura_atual_quadrado
-
-var x = (comprimento_canvas) / 2 - lado_do_quadrado//Posição inicial
-var dx = 8; // velocidade do movimento (seria o aux)
-
-var posy_plataforma = (largura_canvas)*0.404 // para colocar em porcentagem precisa tirar a parte :/ 2 -60 e depois colocar um *0.35
-var altura_da_plataforma = (largura_canvas)*0.9681 - posy_plataforma// em relação ao chao
-
-var altura_do_pulo = largura_canvas*0.42
+var altura_do_pulo = largura_canvas * 0.42
 
 // console.log(lado_do_quadrado)
 var plataforma = false
@@ -47,27 +44,43 @@ var cor_tomate = "#D64D53"
 
 
 function animate() {
-    
-       console.log(x)
+
+    console.log(x)
     //    console.log(altura_da_plataforma)
     requestAnimationFrame(animate); //fica chamando a função animate
-   
 
-    // if (x >= comprimento_plataforma && y >= (posy_plataforma-lado_do_quadrado)) { //y == 233.5
-    
-        
-    //   plataforma = false
-    //     y = altura_atual_quadrado
-        
-    // }
-
-if(x < comprimento_canvas*0.385  ){ // para coletar o queijo
-cor_queijo = 'transparent'
-}
-
-if(x < comprimento_canvas*0.385  ){ // para coletar o queijo
-    cor_queijo = 'transparent'
+    //para colocar limite no lado direito do canvas
+    if(x>=(comprimento_canvas)  - lado_do_quadrado){
+        ir_direita = false
     }
+
+
+    if(x<0){
+        ir_esquerda = false
+    }
+
+    if (x < comprimento_canvas * 0.385 && x > (comprimento_canvas * 0.385 - (comprimento_canvas * 0.385 - comprimento_canvas * 0.3014))) { // para coletar o queijo
+        cor_queijo = 'transparent'
+    }
+
+    if (y < largura_canvas * 0.67 && ((x+lado_do_quadrado) > (comprimento_canvas * 0.275 - 2 * raio_circulos)) && ((x-lado_do_quadrado) < (comprimento_canvas * 0.275-2*raio_circulos))) { // para coletar o queijo
+        cor_laranja = 'transparent'
+    }
+
+    if (y < largura_canvas * 0.478 && ((x+lado_do_quadrado) > (comprimento_canvas * 0.173 - 2 * raio_circulos)) && ((x-lado_do_quadrado)< (comprimento_canvas * 0.173-2*raio_circulos))) { // para coletar o queijo
+        cor_cereja = 'transparent'
+    }
+
+    if (y < largura_canvas * 0.8771 && ((x+lado_do_quadrado)> (comprimento_canvas * 0.173 - 2 * raio_circulos)) && ((x-lado_do_quadrado) < (comprimento_canvas * 0.173-2*raio_circulos))) { // para coletar o queijo
+        cor_tomate = 'transparent'
+    }
+
+    if(cor_cereja=='transparent' && cor_laranja=='transparent' && cor_tomate=='transparent' && cor_queijo=='transparent' && fase_completa==false && (x>=(comprimento_canvas)  - lado_do_quadrado) ){
+        fase_completa=true
+        alert('Fase 1 concluida')
+
+    }
+
 
 
     if (ir_direita == true) {
@@ -76,8 +89,6 @@ if(x < comprimento_canvas*0.385  ){ // para coletar o queijo
         c.fillStyle = 'red'//cor de preenchimento do quadrado
         c.fillRect(x, y, lado_do_quadrado, lado_do_quadrado); //serve para falar as dimensões
         x = x + dx;
-
-
     }
 
     if (ir_direita == false) {
@@ -85,12 +96,7 @@ if(x < comprimento_canvas*0.385  ){ // para coletar o queijo
         c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
         c.fillStyle = 'red'//cor de preenchimento do quadrado
         c.fillRect(x, y, lado_do_quadrado, lado_do_quadrado); //serve para falar as dimensões
-
-
-
     }
-
-
 
     if (ir_esquerda == true) {
 
@@ -98,8 +104,6 @@ if(x < comprimento_canvas*0.385  ){ // para coletar o queijo
         c.fillStyle = 'red'//cor de preenchimento do quadrado
         c.fillRect(x, y, lado_do_quadrado, lado_do_quadrado); //serve para falar as dimensões
         x = x - dx;
-
-
     }
 
     if (ir_esquerda == false) {
@@ -111,20 +115,10 @@ if(x < comprimento_canvas*0.385  ){ // para coletar o queijo
 
     if (pular == true) {
 
-
-        // if (y > posy_plataforma && x < comprimento_plataforma && plataforma == false) { //y <=293.5
-        //     console.log(`posy plataforma:${posy_plataforma}`)
-        //     y = posy_plataforma-lado_do_quadrado //isso resulta em um pulo mais alto ao ficar sobre a plaforma
-        //                 //-20 para somar a altura do quadrado
-        //     plataforma = true
-        // }
-
         c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
         c.fillStyle = 'red'//cor de preenchimento do quadrado
         c.fillRect(x, y, lado_do_quadrado, lado_do_quadrado); //serve para falar as dimensões
-
         y = y - altura_do_pulo;
-
 
         setTimeout(function () {
             c.clearRect(0, 0, innerWidth, innerHeight)//(x,y, onde terminax, onde terminay) // Limpa a tela
@@ -133,86 +127,65 @@ if(x < comprimento_canvas*0.385  ){ // para coletar o queijo
             y = y + altura_do_pulo;
         }, 250)
 
-
-
-
-
-
-
-        pular = false
-
-
-    }
-
-
-
-    if (pular == true && ir_direita == false && ir_esquerda == false) {
-
-
         pular = false
 
     }
 
 
 
+    // if (pular == true && ir_direita == false && ir_esquerda == false) {
+
+    //     pular = false
+    // }
 
 
-    if (pular == true && ir_direita == true) {
+    // if (pular == true && ir_direita == true) {
 
-        ir_direita = false
-        ir_esquerda = false
-        pular = false
+    //     ir_direita = false
+    //     ir_esquerda = false
+    //     pular = false
+    // }
 
-    }
-
-    if (pular == true && ir_esquerda == true) {
+    // if (pular == true && ir_esquerda == true) {
 
 
-        ir_direita = false
-        ir_esquerda = false
-        pular = false
-
-    }
+    //     ir_direita = false
+    //     ir_esquerda = false
+    //     pular = false
+    // }
 
 
     c.fillStyle = 'transparent'//cor de preenchimento do quadrado
-    c.fillRect(0,(largura_canvas*0.968102), (comprimento_canvas), lado_do_quadrado); //serve para falar as dimensões
-
-    // c.fillStyle = 'green'//cor de preenchimento do quadrado
-    // c.fillRect(0, posy_plataforma, comprimento_plataforma, lado_do_quadrado); //serve para falar as dimensões
-    // c.fillStyle = 'yellow'//cor de preenchimento do quadrado
-    // c.fillRect(0,(window.innerHeight-20), (comprimento_canvas), lado_do_quadrado);
+    c.fillRect(0, (largura_canvas * 0.968102), (comprimento_canvas), lado_do_quadrado); //serve para falar as dimensões
 
     // QUEIJO
 
     c.beginPath();
-    c.moveTo(comprimento_canvas*0.385, largura_canvas*0.8) //(x,y) // 470.5 
-    c.lineTo(comprimento_canvas*0.385, largura_canvas*0.93);//(x,y)
-    c.lineTo(comprimento_canvas*0.3014, largura_canvas*0.93);//(x,y)
+    c.moveTo(comprimento_canvas * 0.385, largura_canvas * 0.8) //(x,y) // 470.5 
+    c.lineTo(comprimento_canvas * 0.385, largura_canvas * 0.93);//(x,y)
+    c.lineTo(comprimento_canvas * 0.3014, largura_canvas * 0.93);//(x,y)
     c.closePath();// liga o ponto final ao ponto inicial
     // the fill color
     c.fillStyle = cor_queijo;
     c.fill();
 
     c.beginPath()//inicio do comando 
-    c.arc(comprimento_canvas*0.275, largura_canvas*0.67, raio_circulos, 0, Math.PI * 2, false)  //c.arc (x, y, raio do circulo, angulo_inicial(em rad), angulo_final(em rad), anti_horario ou horario)
+    c.arc(comprimento_canvas * 0.275, largura_canvas * 0.67, raio_circulos, 0, Math.PI * 2, false)  //c.arc (x, y, raio do circulo, angulo_inicial(em rad), angulo_final(em rad), anti_horario ou horario)
     c.fillStyle = cor_laranja//cor para cobrir a área do círculo 
     c.fill() // comando para iniciar o preenchimento da cor
 
     c.beginPath()//inicio do comando 
-    c.arc(comprimento_canvas*0.173, largura_canvas*0.478, raio_circulos, 0, Math.PI * 2, false)  //c.arc (x, y, raio do circulo, angulo_inicial(em rad), angulo_final(em rad), anti_horario ou horario)
+    c.arc(comprimento_canvas * 0.173, largura_canvas * 0.478, raio_circulos, 0, Math.PI * 2, false)  //c.arc (x, y, raio do circulo, angulo_inicial(em rad), angulo_final(em rad), anti_horario ou horario)
     c.fillStyle = cor_cereja//cor para cobrir a área do círculo 
     c.fill() // comando para iniciar o preenchimento da cor
 
     c.beginPath()//inicio do comando 
-    c.arc(comprimento_canvas*0.173, largura_canvas*0.8771, raio_circulos, 0, Math.PI * 2, false)  //c.arc (x, y, raio do circulo, angulo_inicial(em rad), angulo_final(em rad), anti_horario ou horario)
+    c.arc(comprimento_canvas * 0.173, largura_canvas * 0.8771, raio_circulos, 0, Math.PI * 2, false)  //c.arc (x, y, raio do circulo, angulo_inicial(em rad), angulo_final(em rad), anti_horario ou horario)
     c.fillStyle = cor_tomate//cor para cobrir a área do círculo 
     c.fill() // comando para iniciar o preenchimento da cor
 
 
 }
-
-
 
 
 document.addEventListener('keydown', tecla_direita_apertada, false);
@@ -280,75 +253,7 @@ function tecla_esquerda_solta(e) {
 
 
 
-
 animate();
 
 
-
-
-
-
-
-
-
-// for (var quadrados = 0, posx = 50, posy = 30; quadrados < 10; quadrados++) {
-//     c.fillStyle = 'red'//cor de preenchimento do quadrado
-//     var altura = 100;
-//     var comprimento = 100;
-//     c.fillRect(posx, posy, altura, comprimento); //serve para falar as dimensões
-//     posx = posx + 110;
-//     console.log(`Total de quadrados:${quadrados}`)
-// }
-
-// for (var circulos = 0, posx = 100, posy = 200; circulos < 30; circulos++) {
-//     if (circulos < 10) {
-//         c.beginPath()//inicio do comando
-//         c.arc(posx, posy, 50, 0, Math.PI * 2, false)  //c.arc (x, y, raio do circulo, angulo_inicial(em rad), angulo_final(em rad), anti_horario ou horario)
-//         c.strokeStyle = "black" // cor do contorno
-//         c.stroke()// inicia o contorno
-//         c.fillStyle = 'green'//cor para cobrir a área do círculo
-//         c.fill() // comando para iniciar o preenchimento da cor
-//         posx = posx + 110
-//     }
-
-//     else if (circulos == 10) {
-//         posx = 100
-//         posy = 325
-//         for (var i = 0; i < 10; i++) {
-//             c.beginPath()//inicio do comando
-//             c.arc(posx, posy, 50, 0, Math.PI * 2, false)  //c.arc (x, y, tamanho, angulo_inicial, angulo_final, anti_horario)
-//             c.strokeStyle = "black"// cor do contorno
-//             c.stroke()// inicia o contorno
-//             c.fillStyle = 'yellow'
-//             c.fill()// comando para iniciar o preenchimento da cor
-//             posx = posx + 110
-//         }
-//     }
-
-//     else if (circulos == 20) {
-//         posx = 100
-//         posy = 450
-//         for (var i = 0; i < 10; i++) {
-//             c.beginPath()//inicio do comando
-//             c.arc(posx, posy, 50, 0, Math.PI * 2, false)  //c.arc (x, y, tamanho, angulo_inicial, angulo_final, anti_horario)
-//             c.strokeStyle = "black"// cor do contorno
-//             c.stroke()// inicia o contorno
-//             c.fillStyle = 'blue'
-//             c.fill()// comando para iniciar o preenchimento da cor
-//             posx = posx + 110
-//         }
-//     }
-//     console.log(`Total de círculos:${circulos}`)
-
-// }
-
-// for (var retas = 0, posx = 100, posy = 200; retas < 10; retas++) {
-//     c.beginPath(); //inicio de comando
-//     c.moveTo(posx, 150); //início da linha
-//     c.lineTo(posx, 500); // fim da linha
-//     c.strokeStyle = "orange" // cor da linha
-//     c.stroke()// começa a desenhar
-//     posx = posx + 110
-//     console.log(`Total de retas:${retas}`)
-// }
 
